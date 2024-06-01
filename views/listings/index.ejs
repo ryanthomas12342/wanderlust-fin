@@ -1,0 +1,180 @@
+<% layout("/layouts/boilerplate")%>
+
+<style>
+  .filter {
+    display: inline-block;
+    margin: 10px;
+    text-align: center;
+  }
+  .filter a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 10px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    transition: background-color 0.3s, border-color 0.3s;
+  }
+  .filter a:hover {
+    background-color: #f0f0f0;
+  }
+  .filter a.selected {
+    background-color: #e0e0e0;
+    border-color: #000;
+  }
+  #tax-toggle {
+    display: inline-block;
+    height: 3rem;
+    width: 5.5rem;
+    border: 1px solid black;
+    border-radius: 2rem;
+    padding: 0.9rem;
+    margin-left: 9rem;
+    margin-bottom: 20px;
+  }
+</style>
+
+<div id="filters">
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/trending">
+      <i class="fa-solid fa-fire"></i>
+      <p>Trending</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/rooms">
+      <i class="fa-solid fa-bed"></i>
+      <p>Rooms</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/iconic%20cities">
+      <i class="fa-solid fa-mountain-city"></i>
+      <p>Iconic Cities</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/mountains">
+      <i class="fa-solid fa-mountain-sun"></i>
+      <p>Mountains</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/castle">
+      <i class="fa-brands fa-fort-awesome"></i>
+      <p>Castle</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/amazing%20pools">
+      <i class="fa-solid fa-person-swimming"></i>
+      <p>Amazing Pools</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/camping">
+      <i class="fa-solid fa-campground"></i>
+      <p>Camping</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/farms">
+      <i class="fa-solid fa-wheat-awn"></i>
+      <p>Farms</p>
+    </a>
+  </div>
+  <div class="filter">
+    <a href="http://localhost:3000/listings/category/article">
+      <i class="fa-solid fa-snowflake"></i>
+      <p>Article</p>
+    </a>
+  </div>
+  <div class="filter" id="tax-toggle">
+    <div class="form-check-reverse form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="flexSwitchCheckDefault"
+      />
+      <label class="form-check-label" for="flexSwitchCheckDefault">Tax</label>
+    </div>
+  </div>
+</div>
+
+<div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+  <% for(let lis of data) { %>
+  <a href="/listings/<%=lis._id%>" class="lsting-link">
+    <div class="col mb-4 d-flex align-items-stretch">
+      <div class="card col listing-card" style="width: 100%">
+        <img
+          src="<%= lis.image.url %>"
+          class="card-img-top"
+          alt="image not found"
+          height="350rem"
+        />
+
+        <div class="card-body">
+          <h5 class="card-title" data-val="<%= lis.title %>">
+            <b><%= lis.title %></b>
+          </h5>
+          <p data-value="<%=lis.price%>" id="price">
+            &#8377;<%= lis.price ? lis.price.toLocaleString("en-IN") : 'N/A' %>
+          </p>
+        </div>
+      </div>
+    </div></a
+  >
+  <% } %>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", (event) => {
+    console.log("hello");
+
+    const addTax = () => {
+      const lis1 = document.querySelectorAll("#price");
+      console.log(lis1);
+      const tax = sw.checked ? 20 : -20;
+      console.log(sw.checked);
+      lis1.forEach((i) => {
+        console.log(i);
+        const original = parseInt(i.getAttribute("data-value"));
+        console.log(original);
+        const newPrice = original + tax;
+        i.setAttribute("data-value", newPrice);
+        i.innerHTML = `&#8377;${newPrice.toLocaleString("en-IN")}`;
+      });
+    };
+
+    const sw = document.querySelector("#flexSwitchCheckDefault");
+    console.log(sw);
+    sw.addEventListener("click", addTax);
+
+    const search = document.querySelector("#search");
+    console.log(search);
+
+    const filterListing = (e) => {
+      e.preventDefault();
+      const listing = document.querySelectorAll(".card-title");
+      // console.log(listing);
+      let s = search.value;
+      console.log(s);
+      listing.forEach((i) => {
+        const text = i.innerText;
+        console.log(text, s);
+        console.log(i.parentElement.parentElement.parentElement);
+        console.log(text.includes(s));
+        if (text.includes(s)) {
+          i.parentElement.parentElement.parentElement.style.display =
+            "inline-block";
+        } else {
+          i.parentElement.parentElement.parentElement.style.display = "none";
+         
+        }
+      });
+    };
+
+    search.addEventListener("input", filterListing);
+  });
+</script>

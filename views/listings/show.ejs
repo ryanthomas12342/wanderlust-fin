@@ -1,0 +1,130 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="row">
+  <div class="col-8 offset-2">
+    <h1>All the Details</h1>
+    <div class="card mb-3" style="width: 18rem">
+      <img
+        src="<%= det.image.url %>"
+        class="card-img-top"
+        alt="listing-image"
+      />
+      <p>Owned by:<%=det.owner.username%></p>
+      <div class="card-body">
+        <h5 class="card-title"><%= det.title %></h5>
+        <p class="card-text"><%= det.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          Price: &#8377;<%= det.price.toLocaleString("en-IN") %>
+        </li>
+        <li class="list-group-item">Location: <%= det.location %></li>
+        <li class="list-group-item">Country: <%= det.country %></li>
+        <li class="list-group-item">Category: <%= det.category %></li>
+      </ul>
+      <%console.log(det.owner._id,user._id);console.log(det.owner._id.toString()===user._id.toString())%>
+      <div class="card-body">
+        <a href="/listings/<%= det._id %>/edit" class="btn btn-dark">Edit</a>
+        <form
+          method="POST"
+          action="/listings/<%= det._id %>?_method=DELETE"
+          class="d-inline"
+        >
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr />
+
+<div class="row">
+  <div class="col-8 offset-2">
+    <h3>Leave a Review</h3>
+    <form
+      method="POST"
+      action="/listings/<%= det._id %>/reviews"
+      novalidate
+      class="needs-validation"
+    >
+      <div class="mb-3">
+        <!-- <label for="review-rating" class="form-label">Rating</label>
+        <input
+          type="range"
+          class="form-range"
+          id="review-rating"
+          name="review[rating]"
+          min="1"
+          max="5"
+          required
+        /> -->
+        <fieldset class="starability-slot">
+          <legend>Rating</legend>
+          <input
+            type="radio"
+            id="no-rate"
+            class="input-no-rate"
+            name="review[rating]"
+            value="1"
+            checked
+            aria-label="No rating."
+          />
+          <input
+            type="radio"
+            id="first-rate1"
+            name="review[rating]"
+            value="1"
+          />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input
+            type="radio"
+            id="first-rate2"
+            name="review[rating]"
+            value="2"
+          />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input
+            type="radio"
+            id="first-rate3"
+            name="review[rating]"
+            value="3"
+          />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input
+            type="radio"
+            id="first-rate4"
+            name="review[rating]"
+            value="4"
+          />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input
+            type="radio"
+            id="first-rate5"
+            name="review[rating]  "
+            value="5"
+          />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+      </div>
+      <div class="mb-3">
+        <label for="review-comment" class="form-label">Comment</label>
+        <textarea
+          id="review-comment"
+          name="review[comment]"
+          cols="30"
+          rows="5"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">
+          Please submit some comments for review
+        </div>
+      </div>
+      <button type="submit" class="btn btn-outline-dark">Submit Review</button>
+      <a href="/listings/<%= det._id %>/reviews" class="btn btn-outline-dark"
+        >See Review</a
+      >
+    </form>
+  </div>
+</div>
