@@ -59,6 +59,7 @@ store.on("error", (err) => {
 const sessionObj = {
   store,
   secret: "mysupersecretstring",
+  
   resave: false,
   saveUninitialized: true,
 
